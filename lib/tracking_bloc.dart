@@ -41,8 +41,10 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
     StartTimer event,
     Emitter<TrackingState> emit,
   ) async {
+    _timer?.cancel();
     // if (state.isRunning) return;
     emit(state.copyWith(seconds: state.tasks![state.currentIndex].second));
+
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       add(Tap());
     });
@@ -77,8 +79,8 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
   }
 
   FutureOr<void> _onListenTask(ListenTask event, Emitter<TrackingState> emit) {
-    final listenvalue = AddData().getTasksStream();
-    listenvalue.listen((List<TaskModel> tasks) {
+    final listenValue = AddData().getTasksStream();
+    listenValue.listen((List<TaskModel> tasks) {
       add(UpdateTask(tasks: tasks));
     });
   }

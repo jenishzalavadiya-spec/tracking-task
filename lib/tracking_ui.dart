@@ -38,40 +38,52 @@ class _TrackingUiState extends State<TrackingUi> {
             itemCount: tasks.length,
             // state.task.length,
             itemBuilder: (context, index) {
-              return Card(
-                color: Colors.purple.shade50,
-                child: ListTile(
-                  title: Text(
-                    tasks[index].taskName,
-                    // state.task[index]['name'],
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  subtitle: Text(
-                    tasks[index].description,
-                    // snapshot.data!.docs[index]['description'],
-                    // state.task[index]['Description']
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (state.currentIndex == index && state.isRunning)
-                        Text(
-                          Utils().trackerTime(state.seconds),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      IconButton(
-                        iconSize: 30,
-                        onPressed: () {
-                          context.read<TrackingBloc>().add(ToggleTimer(index));
-                        },
-                        icon: state.isRunning && state.currentIndex == index
-                            ? Icon(Icons.pause_circle_filled_sharp)
-                            : Icon(Icons.play_circle_fill_sharp),
+              return InkWell(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Clicked${tasks[index].taskName}")),
+                  );
+                },
+                child: Card(
+                  color: Colors.purple.shade50,
+                  child: ListTile(
+                    title: Text(
+                      tasks[index].taskName,
+                      // state.task[index]['name'],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
-                    ],
+                    ),
+                    subtitle: Text(
+                      tasks[index].description,
+                      // snapshot.data!.docs[index]['description'],
+                      // state.task[index]['Description']
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (state.currentIndex == index && state.isRunning)
+                          Text(
+                            Utils().trackerTime(state.seconds),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        IconButton(
+                          iconSize: 30,
+                          onPressed: () {
+                            context.read<TrackingBloc>().add(
+                              ToggleTimer(index),
+                            );
+                          },
+                          icon: state.isRunning && state.currentIndex == index
+                              ? Icon(Icons.pause_circle_filled_sharp)
+                              : Icon(Icons.play_circle_fill_sharp),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
