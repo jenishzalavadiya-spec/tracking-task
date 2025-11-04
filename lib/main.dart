@@ -7,7 +7,12 @@ import 'package:task_tracking/features/tasks/tracking_bloc/tracking_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    // DevicePreview(enabled: true, builder: (context) =>
+    MyApp(),
+  );
+  // );
+  // runApp(DevicePreview(enabled: true, tools: [const MyApp()]));
 }
 
 class MyApp extends StatelessWidget {
