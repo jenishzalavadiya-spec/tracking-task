@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_tracking/tracking_bloc.dart';
-import 'package:task_tracking/tracking_event.dart';
-import 'package:task_tracking/tracking_state.dart';
+import 'package:task_tracking/features/tasks/tracking_bloc/tracking_bloc.dart';
+
+import '../tracking_bloc/tracking_event.dart';
+import '../tracking_bloc/tracking_state.dart';
 
 class DialogBox extends StatefulWidget {
   const DialogBox({super.key});

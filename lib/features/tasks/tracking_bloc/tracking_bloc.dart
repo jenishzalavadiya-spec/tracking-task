@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
-import 'package:task_tracking/firebase_fanction.dart';
-import 'package:task_tracking/task_model.dart';
-import 'package:task_tracking/tracking_event.dart';
-import 'package:task_tracking/tracking_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_tracking/features/tasks/repositories/taskReop.dart';
+import 'package:task_tracking/features/tasks/tracking_bloc/tracking_event.dart';
+import 'package:task_tracking/features/tasks/tracking_bloc/tracking_state.dart';
+
+import '../model_task/task_model.dart';
 
 class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
   Timer? _timer;
@@ -18,9 +19,8 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
     on<ListenTask>(_onListenTask);
     on<UpdateTask>(_onUpdateTask);
   }
-
   FutureOr<void> _onAddTask(AddTask event, Emitter<TrackingState> emit) {
-    AddData().addData(event.name.toString(), event.description.toString());
+    TaskReop().addData(event.name.toString(), event.description.toString());
   }
 
   FutureOr<void> _onToggleTimer(
@@ -43,7 +43,15 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
   ) async {
     _timer?.cancel();
     // if (state.isRunning) return;
-    emit(state.copyWith(seconds: state.tasks![state.currentIndex].second));
+    final taskId = state.tasks![state.currentIndex].id;
+    String sessionId = await TaskReop().startSession(taskId);
+    emit(
+      state.copyWith(
+        isRunning: true,
+        seconds: state.tasks![state.currentIndex].second,
+        currentSession: sessionId,
+      ),
+    );
 
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       add(Tap());
@@ -51,20 +59,29 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
 
     emit(state.copyWith(isRunning: true));
   }
+  // state.copyWith(seconds: state.tasks![state.currentIndex].second)
 
   FutureOr<void> _onStopTimer(
     StopTimer event,
     Emitter<TrackingState> emit,
   ) async {
+    final taskId = state.tasks![state.currentIndex].id;
+    final sessionId = state.currentSession;
+    state.seconds;
     _timer?.cancel();
-    // log("task to update == ${state.tasks?[state.currentIndex].id}");
-    // log("current index  == ${state.currentIndex}");
-    // log("task  == ${state.tasks}");
-    await AddData().updateTaskSecond(
+    await TaskReop().updateTaskSecond(
       state.tasks![state.currentIndex].id,
       state.seconds,
     );
-    emit(state.copyWith(isRunning: false, currentIndex: -1, seconds: 0));
+    await TaskReop().stopSession(taskId, sessionId, state.seconds);
+    emit(
+      state.copyWith(
+        isRunning: false,
+        currentIndex: -1,
+        seconds: 0,
+        currentSession: null,
+      ),
+    );
   }
 
   FutureOr<void> _onTap(Tap event, Emitter<TrackingState> emit) {
@@ -79,7 +96,7 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
   }
 
   FutureOr<void> _onListenTask(ListenTask event, Emitter<TrackingState> emit) {
-    final listenValue = AddData().getTasksStream();
+    final listenValue = TaskReop().getTasksStream();
     listenValue.listen((List<TaskModel> tasks) {
       add(UpdateTask(tasks: tasks));
     });

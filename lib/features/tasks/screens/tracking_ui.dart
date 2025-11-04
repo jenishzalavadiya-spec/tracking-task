@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_tracking/alert_dialog.dart';
-import 'package:task_tracking/tracking_bloc.dart';
-import 'package:task_tracking/tracking_event.dart';
-import 'package:task_tracking/tracking_state.dart';
-import 'package:task_tracking/utils.dart';
+import 'package:task_tracking/core/utils.dart';
+import 'package:task_tracking/features/tasks/screens/task_data_screen.dart';
+import 'package:task_tracking/features/tasks/tracking_bloc/tracking_bloc.dart';
+import 'package:task_tracking/features/tasks/widgets/alert_dialog.dart';
+
+import '../tracking_bloc/tracking_event.dart';
+import '../tracking_bloc/tracking_state.dart';
 
 class TrackingUi extends StatefulWidget {
   const TrackingUi({super.key});
@@ -40,6 +42,10 @@ class _TrackingUiState extends State<TrackingUi> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TaskDataScreen()),
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Clicked${tasks[index].taskName}")),
                   );

@@ -4,6 +4,7 @@ class TaskModel {
   final dynamic id;
   final int second;
   final int session;
+  final String currentSession;
 
   TaskModel({
     required this.description,
@@ -11,6 +12,7 @@ class TaskModel {
     required this.second,
     required this.id,
     required this.session,
+    required this.currentSession,
   });
 
   factory TaskModel.fromMap(Map<String, dynamic> map) {
@@ -21,6 +23,7 @@ class TaskModel {
       second: map["second"] ?? 0,
       taskName: map["taskName"] ?? "",
       description: map["description"] ?? "",
+      currentSession: map["currentSession"]?.toString() ?? "",
     );
   }
   Map<String, dynamic> toMap() {

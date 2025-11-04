@@ -1,4 +1,4 @@
-import 'package:task_tracking/task_model.dart';
+import '../model_task/task_model.dart';
 
 abstract class TrackingEvent {}
 

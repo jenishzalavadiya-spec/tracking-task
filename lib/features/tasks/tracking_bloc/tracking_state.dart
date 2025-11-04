@@ -1,19 +1,22 @@
-import 'package:task_tracking/task_model.dart';
+import '../model_task/task_model.dart';
 
 class TrackingState {
-  // final List<Map<String, dynamic>> task;
-  // final bool isToggle;
   final bool isRunning;
   final int seconds;
   final int currentIndex;
+  final String currentSession;
   final List<TaskModel>? tasks;
   const TrackingState({
     this.currentIndex = 0,
     this.seconds = 0,
-    // this.isToggle = false,
     this.isRunning = false,
     this.tasks,
+    this.currentSession = "",
+
+    // this.isToggle = false,
     // this.task = const [],
+    // final List<Map<String, dynamic>> task;
+    // final bool isToggle;
   });
   TrackingState copyWith({
     bool? isToggle,
@@ -21,6 +24,7 @@ class TrackingState {
     bool? isRunning,
     int? seconds,
     int? currentIndex,
+    String? currentSession,
     List<TaskModel>? tasks,
   }) {
     return TrackingState(
@@ -30,6 +34,7 @@ class TrackingState {
       seconds: seconds ?? this.seconds,
       currentIndex: currentIndex ?? this.currentIndex,
       tasks: tasks ?? this.tasks,
+      currentSession: currentSession ?? this.currentSession,
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_tracking/tracking_bloc.dart';
-import 'package:task_tracking/tracking_ui.dart';
+import 'package:task_tracking/features/tasks/screens/tracking_ui.dart';
+import 'package:task_tracking/features/tasks/tracking_bloc/tracking_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
