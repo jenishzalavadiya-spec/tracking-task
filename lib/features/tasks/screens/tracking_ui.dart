@@ -46,7 +46,7 @@ class _TrackingUiState extends State<TrackingUi> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          TaskDataScreen(taskId: state.tasks![index].id),
+                          TaskDataScreen(task: state.tasks![index]),
                     ),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(

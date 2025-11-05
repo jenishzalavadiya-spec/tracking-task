@@ -134,4 +134,31 @@ class TaskReop {
 
     return Map.fromEntries(sortedEntries);
   }
+
+  Future<Map<DateTime, double>> getMonthlyHours(String taskId) async {
+    final now = DateTime.now();
+    final monthStart = DateTime(now.year, now.month, 1);
+    final monthEnd = DateTime(now.year, now.month + 1, 0);
+
+    final query = await FirebaseFirestore.instance
+        .collection("task")
+        .doc(taskId)
+        .collection("session")
+        .where("startTime", isGreaterThanOrEqualTo: monthStart)
+        .where("endTime", isLessThanOrEqualTo: monthEnd)
+        .get();
+
+    Map<DateTime, double> monthlyData = {};
+    for (var doc in query.docs) {
+      final data = doc.data();
+      final start = (data["startTime"] as Timestamp).toDate();
+      final end = (data["endTime"] as Timestamp).toDate();
+
+      final convertHours = end.difference(start).inSeconds / 3600;
+
+      final dayKey = DateTime(start.year, start.month, start.day);
+      monthlyData[dayKey] = (monthlyData[dayKey] ?? 0) + convertHours;
+    }
+    return monthlyData;
+  }
 }

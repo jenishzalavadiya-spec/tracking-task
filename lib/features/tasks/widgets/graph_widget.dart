@@ -68,128 +68,141 @@
 //     );
 //   }
 // }
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class WeeklyChart extends StatelessWidget {
+import '../model_task/task_model.dart';
+
+class GraphWidget extends StatelessWidget {
   final Map<String, int> data;
-  const WeeklyChart({super.key, required this.data});
+  final TaskModel task;
+  const GraphWidget({super.key, required this.data, required this.task});
 
   double toHours(int sec) => sec / 3600;
 
   @override
   Widget build(BuildContext context) {
-    final sortedKeys = data.keys.toList()..sort(); // ✅ Sort dates
+    final sortedKeys = data.keys.toList()..sort();
     final values = sortedKeys.map((e) => toHours(data[e]!)).toList();
 
-    final spots = List.generate(sortedKeys.length, (i) {
+    final spots = List.generate(values.length, (i) {
       return FlSpot(i.toDouble(), values[i]);
     });
 
     final maxY = (values.reduce((a, b) => a > b ? a : b) + 1).ceilToDouble();
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      decoration: BoxDecoration(
-        color: const Color(0xffE6E7EB),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
+    return SingleChildScrollView(
+      child: Column(
         children: [
-          Column(
-            children: [
-              const Text(
-                "dsa",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 13),
-              SizedBox(
-                height: 250,
-                child: LineChart(
-                  LineChartData(
-                    minY: 0,
-                    maxY: maxY,
-                    borderData: FlBorderData(show: false),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 24),
+            color: Color(0xffE6E7EB),
+            child: Column(
+              children: [
+                Text(
+                  task.taskName,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(task.description),
+                SizedBox(height: 15),
+                SizedBox(
+                  height: 250,
+                  child: LineChart(
+                    LineChartData(
+                      minY: 0,
+                      maxY: maxY,
+                      borderData: FlBorderData(show: false),
 
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      horizontalInterval: 1,
-                      getDrawingHorizontalLine: (value) =>
-                          FlLine(strokeWidth: 1, color: Colors.grey.shade300),
-                    ),
-
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: spots,
-                        isCurved: true,
-                        barWidth: 3,
-                        color: Colors.amber.shade700,
-                        dotData: FlDotData(show: true), // ✅ no dots
-                      ),
-                    ],
-
-                    titlesData: FlTitlesData(
-                      topTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      rightTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
+                      gridData: FlGridData(
+                        show: true,
+                        drawVerticalLine: true,
+                        horizontalInterval: 0.5,
+                        getDrawingHorizontalLine: (value) =>
+                            FlLine(strokeWidth: 5, color: Colors.grey.shade300),
                       ),
 
-                      // ✅ Y axis "Hours Per Day"
-                      leftTitles: AxisTitles(
-                        axisNameWidget: Text(
-                          "Hours",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: spots,
+                          isCurved: true,
+                          barWidth: 3,
+                          color: Colors.purple.shade300,
+                          dotData: FlDotData(show: true),
                         ),
-                        axisNameSize: 40,
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 40,
-                          interval: 1,
-                          getTitlesWidget: (value, _) => Text(
-                            value.toInt().toString(),
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ),
+                      ],
 
-                      // ✅ X axis "Days"
-                      bottomTitles: AxisTitles(
-                        axisNameWidget: const Text(
-                          "Days",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
+                      titlesData: FlTitlesData(
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
                         ),
-                        axisNameSize: 28,
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          getTitlesWidget: (value, _) {
-                            final i = value.toInt();
-                            if (i < 0 || i >= sortedKeys.length) {
-                              return const SizedBox();
-                            }
-                            return Text(
-                              sortedKeys[i].split("-").last,
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+
+                        leftTitles: AxisTitles(
+                          axisNameWidget: Padding(
+                            padding: EdgeInsets.only(left: 70),
+                            child: Text(
+                              "Hours",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          axisNameSize: 40,
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 40,
+                            interval: 1,
+                            getTitlesWidget: (value, _) => Text(
+                              value.toInt().toString(),
                               style: const TextStyle(fontSize: 12),
-                            );
-                          },
+                            ),
+                          ),
+                        ),
+
+                        bottomTitles: AxisTitles(
+                          axisNameWidget: Padding(
+                            padding: EdgeInsets.only(left: 70),
+                            child: Text(
+                              "Days",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          axisNameSize: 28,
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            interval: 1,
+                            getTitlesWidget: (value, _) {
+                              int index = value.toInt();
+
+                              if (value != index.toDouble()) {
+                                return const SizedBox();
+                              }
+
+                              if (index < 0 || index >= sortedKeys.length) {
+                                return const SizedBox();
+                              }
+
+                              return Text(
+                                "${index + 1}",
+                                style: const TextStyle(fontSize: 12),
+                              );
+                            },
+                          ),
                         ),
                       ),
+                      lineTouchData: LineTouchData(enabled: true),
                     ),
-
-                    // ✅ Disable tooltips for clean design
-                    lineTouchData: LineTouchData(enabled: false),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
