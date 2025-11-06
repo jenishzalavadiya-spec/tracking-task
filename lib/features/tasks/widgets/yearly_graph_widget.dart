@@ -171,6 +171,7 @@ class YearlyGraphWidget extends StatelessWidget {
     int? lastShownMonth;
 
     return SingleChildScrollView(
+      reverse: true,
       scrollDirection: Axis.horizontal,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
