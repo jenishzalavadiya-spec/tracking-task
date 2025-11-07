@@ -27,3 +27,8 @@ class UpdateTask extends TrackingEvent {
 
   UpdateTask({required this.tasks});
 }
+
+class LoadingGraphData extends TrackingEvent {
+  final String id;
+  LoadingGraphData({required this.id});
+}

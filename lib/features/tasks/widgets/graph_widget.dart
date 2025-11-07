@@ -90,7 +90,9 @@ class GraphWidget extends StatelessWidget {
       return FlSpot(i.toDouble(), values[i]);
     });
 
-    final maxY = (values.reduce((a, b) => a > b ? a : b) + 1).ceilToDouble();
+    final maxY = (values
+        .fold(0, (a, b) => (a > b ? a : b).toInt() + 1)
+        .ceilToDouble());
 
     return SingleChildScrollView(
       child: Column(

@@ -7,7 +7,6 @@ import '../tracking_bloc/tracking_state.dart';
 
 class DialogBox extends StatefulWidget {
   const DialogBox({super.key});
-
   @override
   State<DialogBox> createState() => _DialogBoxState();
 }
@@ -16,7 +15,6 @@ class _DialogBoxState extends State<DialogBox> {
   final TextEditingController taskNameController = TextEditingController();
   final TextEditingController taskDescriptionController =
       TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TrackingBloc, TrackingState>(

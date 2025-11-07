@@ -191,14 +191,14 @@ class YearlyGraphWidget extends StatelessWidget {
                 }
 
                 return SizedBox(
-                  width: 18,
+                  width: 18.5,
                   height: 19,
                   child: Text(
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.right,
                     text,
                     style: TextStyle(
                       fontSize: 10,
-                      color: Colors.grey.shade900,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -222,10 +222,7 @@ class YearlyGraphWidget extends StatelessWidget {
                     child: Text(
                       weekDays[i],
                       textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.grey.shade900,
-                      ),
+                      style: TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   );
                 }),
@@ -234,39 +231,36 @@ class YearlyGraphWidget extends StatelessWidget {
               const SizedBox(width: 4),
 
               // ✅ Heatmap Blocks
-              Transform.translate(
-                offset: Offset(0, 0),
-                child: Row(
-                  children: List.generate(columns, (c) {
-                    return Column(
-                      children: List.generate(7, (r) {
-                        final dayIndex = c * 7 + r;
-                        if (dayIndex >= daysInYear) {
-                          return const SizedBox(width: 15, height: 15);
-                        }
+              Row(
+                children: List.generate(columns, (c) {
+                  return Column(
+                    children: List.generate(7, (r) {
+                      final dayIndex = c * 7 + r;
+                      if (dayIndex >= daysInYear) {
+                        return const SizedBox(width: 15, height: 15);
+                      }
 
-                        final date = yearStart.add(Duration(days: dayIndex));
-                        final key = DateTime(date.year, date.month, date.day);
-                        final hours = data[key] ?? 0.0;
+                      final date = yearStart.add(Duration(days: dayIndex));
+                      final key = DateTime(date.year, date.month, date.day);
+                      final hours = data[key] ?? 0.0;
 
-                        return Tooltip(
-                          message:
-                              "${date.day}/${date.month}/${date.year} → ${hours.toStringAsFixed(1)}h",
-                          child: Container(
-                            alignment: Alignment(10, 0),
-                            margin: const EdgeInsets.all(2),
-                            width: 14,
-                            height: 14,
-                            decoration: BoxDecoration(
-                              color: getColor(hours),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
+                      return Tooltip(
+                        message:
+                            "${date.day}/${date.month}/${date.year} → ${hours.toStringAsFixed(1)}h",
+                        child: Container(
+                          alignment: Alignment(10, 0),
+                          margin: const EdgeInsets.all(2),
+                          width: 14,
+                          height: 14,
+                          decoration: BoxDecoration(
+                            color: getColor(hours),
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                        );
-                      }),
-                    );
-                  }),
-                ),
+                        ),
+                      );
+                    }),
+                  );
+                }),
               ),
             ],
           ),

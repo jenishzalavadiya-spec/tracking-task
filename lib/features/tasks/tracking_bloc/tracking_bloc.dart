@@ -18,6 +18,7 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
     on<Tap>(_onTap);
     on<ListenTask>(_onListenTask);
     on<UpdateTask>(_onUpdateTask);
+    on<LoadingGraphData>(_onLoadingGraphData);
   }
   FutureOr<void> _onAddTask(AddTask event, Emitter<TrackingState> emit) {
     TaskReop().addData(event.name.toString(), event.description.toString());
@@ -104,5 +105,14 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
 
   FutureOr<void> _onUpdateTask(UpdateTask event, Emitter<TrackingState> emit) {
     emit(state.copyWith(tasks: event.tasks));
+  }
+
+  FutureOr<void> _onLoadingGraphData(
+    LoadingGraphData event,
+    Emitter<TrackingState> emit,
+  ) async {
+    final lineGraph = await TaskReop().getDailySeconds(event.id);
+    final commitGraph = await TaskReop().getYearlyHours(event.id);
+    emit(state.copyWith(commitGraph: commitGraph, lineGraph: lineGraph));
   }
 }

@@ -6,7 +6,11 @@ class TrackingState {
   final int currentIndex;
   final String currentSession;
   final List<TaskModel>? tasks;
+  final Map<DateTime, double>? commitGraph;
+  final Map<String, int>? lineGraph;
   const TrackingState({
+    this.commitGraph,
+    this.lineGraph,
     this.currentIndex = 0,
     this.seconds = 0,
     this.isRunning = false,
@@ -19,6 +23,8 @@ class TrackingState {
     // final bool isToggle;
   });
   TrackingState copyWith({
+    Map<String, int>? lineGraph,
+    Map<DateTime, double>? commitGraph,
     bool? isToggle,
     task,
     bool? isRunning,
@@ -35,6 +41,8 @@ class TrackingState {
       currentIndex: currentIndex ?? this.currentIndex,
       tasks: tasks ?? this.tasks,
       currentSession: currentSession ?? this.currentSession,
+      lineGraph: lineGraph ?? this.lineGraph,
+      commitGraph: commitGraph ?? this.commitGraph,
     );
   }
 }
