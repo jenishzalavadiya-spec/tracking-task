@@ -6,11 +6,11 @@ class TrackingState {
   final int currentIndex;
   final String currentSession;
   final List<TaskModel>? tasks;
-  final Map<DateTime, double>? commitGraph;
-  final Map<String, int>? lineGraph;
+  final Map<DateTime, double> commitGraph;
+  final Map<String, int> lineGraph;
   const TrackingState({
-    this.commitGraph,
-    this.lineGraph,
+    required this.commitGraph,
+    required this.lineGraph,
     this.currentIndex = 0,
     this.seconds = 0,
     this.isRunning = false,

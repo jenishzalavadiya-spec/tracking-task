@@ -30,71 +30,73 @@ class _TaskDataScreenState extends State<TaskDataScreen> {
         centerTitle: true,
         backgroundColor: Colors.deepPurple.shade200,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            BlocBuilder<TrackingBloc, TrackingState>(
-              builder: (context, state) {
-                context.read<TrackingBloc>().add(
-                  LoadingGraphData(id: widget.task.id),
-                );
-                return (state.lineGraph!.isEmpty &&
-                        state.lineGraph == null &&
-                        state.commitGraph!.isEmpty &&
-                        state.commitGraph == null)
-                    ? Center(child: Text("Data Not Found"))
-                    : Column(
-                        children: [
-                          GraphWidget(
-                            data: state.lineGraph ?? {},
-                            task: widget.task,
-                          ),
-                          YearlyGraphWidget(data: state.commitGraph ?? {}),
-                        ],
-                      );
-              },
-            ),
+      body: Padding(
+        padding: EdgeInsets.all(10),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              BlocBuilder<TrackingBloc, TrackingState>(
+                builder: (context, state) {
+                  context.read<TrackingBloc>().add(
+                    LoadingGraphData(id: widget.task.id),
+                  );
 
-            // FutureBuilder<Map<String, int>>(
-            //   future: TaskReop().getDailySeconds(widget.task.id),
-            //   builder: (context, snapshot) {
-            //     if (!snapshot.hasData) {
-            //       return Center(child: CircularProgressIndicator());
-            //     }
-            //     return Padding(
-            //       padding: EdgeInsets.all(17),
-            //       child: GraphWidget(data: snapshot.data!, task: widget.task),
-            //     );
-            //   },
-            // ),
-            // FutureBuilder<Map<DateTime, double>>(
-            //   future: TaskReop().getYearlyHours(widget.task.id),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return Center(child: CircularProgressIndicator());
-            //     }
-            //     if (snapshot.hasData) {
-            //       return Column(
-            //         children: [
-            //           Container(
-            //             decoration: BoxDecoration(
-            //               border: Border.all(color: Colors.black12, width: 3),
-            //             ),
-            //             child: Padding(
-            //               padding: EdgeInsetsGeometry.all(15),
-            //               child: YearlyGraphWidget(data: snapshot.data!),
-            //             ),
-            //           ),
-            //         ],
-            //       );
-            //     }
-            //     if (snapshot.hasError) {
-            //       return Text("${snapshot.error}");
-            //     }
-            //     return Container();
-            //   },
-            // ),
-          ],
+                  return (state.lineGraph.isEmpty && state.commitGraph.isEmpty)
+                      ? Center(child: Text("Data Not Found"))
+                      : Column(
+                          children: [
+                            GraphWidget(
+                              data: state.lineGraph,
+                              task: widget.task,
+                            ),
+                            SizedBox(height: 30),
+                            YearlyGraphWidget(data: state.commitGraph),
+                          ],
+                        );
+                },
+              ),
+
+              // FutureBuilder<Map<String, int>>(
+              //   future: TaskReop().getDailySeconds(widget.task.id),
+              //   builder: (context, snapshot) {
+              //     if (!snapshot.hasData) {
+              //       return Center(child: CircularProgressIndicator());
+              //     }
+              //     return Padding(
+              //       padding: EdgeInsets.all(17),
+              //       child: GraphWidget(data: snapshot.data!, task: widget.task),
+              //     );
+              //   },
+              // ),
+              // FutureBuilder<Map<DateTime, double>>(
+              //   future: TaskReop().getYearlyHours(widget.task.id),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.connectionState == ConnectionState.waiting) {
+              //       return Center(child: CircularProgressIndicator());
+              //     }
+              //     if (snapshot.hasData) {
+              //       return Column(
+              //         children: [
+              //           Container(
+              //             decoration: BoxDecoration(
+              //               border: Border.all(color: Colors.black12, width: 3),
+              //             ),
+              //             child: Padding(
+              //               padding: EdgeInsetsGeometry.all(15),
+              //               child: YearlyGraphWidget(data: snapshot.data!),
+              //             ),
+              //           ),
+              //         ],
+              //       );
+              //     }
+              //     if (snapshot.hasError) {
+              //       return Text("${snapshot.error}");
+              //     }
+              //     return Container();
+              //   },
+              // ),
+            ],
+          ),
         ),
       ),
     );

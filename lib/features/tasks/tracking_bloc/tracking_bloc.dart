@@ -10,7 +10,8 @@ import '../model_task/task_model.dart';
 class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
   Timer? _timer;
   late StreamSubscription<List<TaskModel>> getTasksStream;
-  TrackingBloc() : super(TrackingState(tasks: [])) {
+  TrackingBloc()
+    : super(TrackingState(tasks: [], commitGraph: {}, lineGraph: {})) {
     on<AddTask>(_onAddTask);
     on<ToggleTimer>(_onToggleTimer);
     on<StartTimer>(_onStartTimer);
